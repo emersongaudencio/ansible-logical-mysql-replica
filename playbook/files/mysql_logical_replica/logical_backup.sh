@@ -96,7 +96,7 @@ fi
 
 ### Restore on the new replica server #####
 ### Restoring db structure
-cat $backup_path/structure_full_$today.sql | sed -e 's/DEFINER=`[A-Za-z0-9_]*`@`localhost`//g' > $backup_path/structure_full_$today_temp.sql
+cat $backup_path/structure_full_$today.sql | sed -e 's/DEFINER=`[A-Za-z0-9_]*`@`[A-Za-z0-9_]*`//g' > $backup_path/structure_full_$today_temp.sql
 cat $backup_path/structure_full_$today_temp.sql | sed -e 's/SQL SECURITY DEFINER//g' > $backup_path/structure_full_$today_fixed.sql
 mysql --user=$restore_user --password=$restore_pass --host=$replica_server_address --force  <  $backup_path/structure_full_$today_fixed.sql
 if [ $? -eq 0 ]; then
@@ -116,7 +116,7 @@ else
 fi
 
 ### Restoring db routines
-cat $backup_path/routines_full_$today.sql | sed -e 's/DEFINER=`[A-Za-z0-9_]*`@`localhost`//g' > $backup_path/routines_full_$today_temp.sql
+cat $backup_path/routines_full_$today.sql | sed -e 's/DEFINER=`[A-Za-z0-9_]*`@`[A-Za-z0-9_]*`//g' > $backup_path/routines_full_$today_temp.sql
 cat $backup_path/routines_full_$today_temp.sql | sed -e 's/SQL SECURITY DEFINER//g' > $backup_path/routines_full_$today_fixed.sql
 mysql --user=$restore_user --password=$restore_pass --host=$replica_server_address --force <  $backup_path/routines_full_$today_fixed.sql
 if [ $? -eq 0 ]; then
@@ -127,7 +127,7 @@ else
 fi
 
 ### Restoring db triggers
-cat $backup_path/triggers_full_$today.sql | sed -e 's/DEFINER=`[A-Za-z0-9_]*`@`localhost`//g' > $backup_path/triggers_full_$today_temp.sql
+cat $backup_path/triggers_full_$today.sql | sed -e 's/DEFINER=`[A-Za-z0-9_]*`@`[A-Za-z0-9_]*`//g' > $backup_path/triggers_full_$today_temp.sql
 cat $backup_path/triggers_full_$today_temp.sql | sed -e 's/SQL SECURITY DEFINER//g' > $backup_path/triggers_full_$today_fixed.sql
 mysql --user=$restore_user --password=$restore_pass --host=$replica_server_address --force <  $backup_path/triggers_full_$today_fixed.sql
 if [ $? -eq 0 ]; then
