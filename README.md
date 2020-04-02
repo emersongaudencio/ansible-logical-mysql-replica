@@ -91,13 +91,13 @@ Parameters explanation:
 
   5th parameter: mysql password for taking our backup on the source database
 
-  6th parameter: ip address for taking our backup on the source database
+  6th parameter: ip address of the source database
 
   7th parameter: mysql user for restoration of our backup on the destination database
 
   8th parameter: mysql password for restoration of our backup on the destination database
 
-  9th parameter: ip address for taking our backup on the destination database
+  9th parameter: ip address of the destination database
 
   10th parameter: mysql user to setup replication streaming from the source database to destination database
 
