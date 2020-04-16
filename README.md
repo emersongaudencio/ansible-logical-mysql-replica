@@ -106,7 +106,7 @@ Parameters explanation:
   12th parameter: directory to store our backup
 ```
 
-Grant privileges to a MySQL User for Migration purpose on the source database:
+Suggested grants privileges to a MySQL User for Migration purpose on the source database:
 
 ```
 ############ Setting a proper privileges towards a database #####
@@ -115,11 +115,20 @@ GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES,
 flush privileges;
 ```
 
-Grant privileges to a MySQL User for Migration purpose on the destination database:
+Suggested grants privileges to a MySQL User for Migration purpose on the destination database:
 
 ```
 ############ Setting a proper privileges towards a database #####
 GRANT USAGE ON *.* TO 'migration_user'@'%' IDENTIFIED BY 'test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379';
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, RELOAD, PROCESS, REFERENCES, INDEX, ALTER, SHOW DATABASES, CREATE TEMPORARY TABLES, LOCK TABLES, EXECUTE, REPLICATION SLAVE, REPLICATION CLIENT, CREATE VIEW, SHOW VIEW, CREATE ROUTINE, ALTER ROUTINE, CREATE USER, EVENT, TRIGGER ON *.* TO 'migration_user'@'%' WITH GRANT OPTION;
+flush privileges;
+```
+
+Suggested grants privileges to a MySQL User for replication purpose on the source database:
+
+```
+############ Setting a proper privileges towards a database #####
+CREATE USER replication_user@'%' IDENTIFIED BY 'YOURPASSWORD';
+GRANT REPLICATION SLAVE ON *.* TO replication_user@'%';
 flush privileges;
 ```
