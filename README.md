@@ -71,40 +71,45 @@
  ```
  sh run_mysql_logical_replica.sh dbmysql57 1 1 "migration_user" "test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379" 172.16.122.146 "migration_user" "test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379" 172.16.122.154 replication_user 74a6bf6d1c9f99b94e75ff27d2636fbb "/backup"
  ```
+ ### Parameters specification (Standalone to Standalone):
+ #### run_mysql_logical_replica.sh
+ Parameter    | Value           | Mandatory   | Order        | Accepted values
+ ------------ | ------------- | ------------- | ------------- | -------------
+ hostname or group-name listed on hosts files | dbmysql57 | Yes | 1 | hosts who are placed inside of the hosts file
+ setup replication | 1 | Yes | 2 | 0 to not enable replication and 1 to enable replication
+ scenario | 1 | Yes | 3 | 1 to enable replication on Standalone and 2 to enable replication on AWS RDS
+ mysql user from source database | migration_user | Yes | 4 | mysql user for taking our backup on the source database
+ mysql password from source database | test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379 | Yes | 5 | mysql password for taking our backup on the source database
+ server address from source database | 172.16.122.146 | Yes | 6 | ip address or dns name of the source database
+ mysql user from destination database | migration_user | Yes | 7 | mysql user for taking the backup on the destination database
+ mysql password from destination database | test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379 | Yes | 8 | mysql password for taking the backup on the destination database
+ server address from destination database | 172.16.122.154 | Yes | 9 | ip address or dns name of the source database
+ mysql user to setup replication streaming | replication_user | Yes | 10 | mysql user to setup replication streaming from the source database to destination database
+ mysql password to setup replication streaming | 74a6bf6d1c9f99b94e75ff27d2636fbb | Yes | 11 | mysql password to setup replication streaming from the source database to destination database
+ directory to store the backup | "/backup" | Yes | 12 | directory to store the backup
+
 
  Alright finally we can run execute our script for AWS RDS MySQL/MariaDB using Ansible as we planned to, run the command below:
  ```
  sh run_mysql_logical_replica.sh dbmysql57ec2 1 2 "migration_user" "test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379" 10.70.2.59 "migration_user" "test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379" rds-mariadb102.cn65x7webqto.us-east-1.rds.amazonaws.com replication_user 74a6bf6d1c9f99b94e75ff27d2636fbb "/backup"
  ```
+ ### Parameters specification (Standalone to AWS):
+ #### run_mysql_logical_replica.sh
+ Parameter    | Value           | Mandatory   | Order        | Accepted values
+ ------------ | ------------- | ------------- | ------------- | -------------
+ hostname or group-name listed on hosts files | dbmysql57ec2 | Yes | 1 | hosts who are placed inside of the hosts file
+ setup replication | 1 | Yes | 2 | 0 to not enable replication and 1 to enable replication
+ scenario | 2 | Yes | 3 | 1 to enable replication on Standalone and 2 to enable replication on AWS RDS
+ mysql user from source database | migration_user | Yes | 4 | mysql user for taking our backup on the source database
+ mysql password from source database | test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379 | Yes | 5 | mysql password for taking our backup on the source database
+ server address from source database | 10.70.2.59 | Yes | 6 | ip address or dns name of the source database
+ mysql user from destination database | migration_user | Yes | 7 | mysql user for taking the backup on the destination database
+ mysql password from destination database | test-77d2f78c-d99b-4d38-93d5-8bb5d6dd5379 | Yes | 8 | mysql password for taking the backup on the destination database
+ server address from destination database | rds-mariadb102.cn65x7webqto.us-east-1.rds.amazonaws.com | Yes | 9 | ip address or dns name of the source database
+ mysql user to setup replication streaming | replication_user | Yes | 10 | mysql user to setup replication streaming from the source database to destination database
+ mysql password to setup replication streaming | 74a6bf6d1c9f99b94e75ff27d2636fbb | Yes | 11 | mysql password to setup replication streaming from the source database to destination database
+ directory to store the backup | "/backup" | Yes | 12 | directory to store the backup
 
-Parameters explanation:
-
-```
-  the script run_mysql_logical_replica.sh has 12 parameters and I'm going to explain the reason why for each one of them, see below :
-  1rst parameter: hostname or group-name listed on hosts files
-
-  2nd parameter: 0 to not enable replication and 1 to enable replication
-
-  3rd parameter: 1 to not enable replication on AWS RDS and 2 to enable replication on AWS RDS
-
-  4th parameter: mysql user for taking our backup on the source database
-
-  5th parameter: mysql password for taking our backup on the source database
-
-  6th parameter: ip address of the source database
-
-  7th parameter: mysql user for restoration of our backup on the destination database
-
-  8th parameter: mysql password for restoration of our backup on the destination database
-
-  9th parameter: ip address of the destination database
-
-  10th parameter: mysql user to setup replication streaming from the source database to destination database
-
-  11th parameter: mysql password to setup replication streaming from the source database to destination database
-
-  12th parameter: directory to store our backup
-```
 
 Suggested grants privileges to a MySQL User for Migration purpose on the source database:
 
