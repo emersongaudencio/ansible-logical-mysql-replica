@@ -1,13 +1,3 @@
-# This is the default ansible 'hosts' file.
-#
-
-## [dbservers]
-##
-## db01.intranet.mydomain.net
-## db02.intranet.mydomain.net
-## 10.25.1.56
-## 10.25.1.57
-
-[galeracluster]
+[replicationservers]
+srvlocal ansible_connection=local
 db-intermidiate-01 ansible_ssh_host=172.16.122.154
-dbmysql57 ansible_ssh_host=172.16.122.146

@@ -7,7 +7,7 @@
        copy: src=mysql_logical_replica/logical_backup.sh dest=/tmp mode=0777
 
      - name: Executing MySQL Logical Replica script
-       command: "sh /tmp/logical_backup.sh {{ config_replication }} {{ standalone_dbaas }} {{ source_backup_user }} {{ source_backup_pass }} {{ source_master_server_address }} {{ destination_restore_user }} {{ destination_restore_pass }} {{ destination_replica_server_address }} {{ destination_replication_user }} {{ destination_replication_pass }} {{ backup_directory }}"
+       command: "/tmp/logical_backup.sh {{ config_replication }} {{ standalone_dbaas }} {{ source_backup_user }} {{ source_backup_pass }} {{ source_master_server_address }} {{ destination_restore_user }} {{ destination_restore_pass }} {{ destination_replica_server_address }} {{ destination_replication_user }} {{ destination_replication_pass }} {{ backup_directory }}"
        register: cmd_logical
      - debug: msg="{{ cmd_logical.stdout_lines|replace('\\t',' ') }}"
      - debug: msg="{{ cmd_logical.stderr_lines|replace('\\t',' ') }}"

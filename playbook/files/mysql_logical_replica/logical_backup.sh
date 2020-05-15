@@ -197,8 +197,8 @@ then
     if [[ $verify_mysql == "" ]]
     then
       ### installation mysql client via apt ####
-      sudo apt-get update
-      sudo apt install mysql-client-5.7
+      sudo apt-get update -y
+      sudo apt install mysql-client-5.7 -y
     fi
 
     verify_mydumper=`dpkg -l | grep mydumper | awk '{print $2}'`
