@@ -63,8 +63,10 @@ identify_os(){
     if command -v rpm >/dev/null && [[ -e /etc/redhat-release ]]
     then
         os_type=rhel
-        el_version=$(rpm -qa '(oraclelinux|sl|redhat|centos|fedora)-release(|-server)' --queryformat '%{VERSION}')
+        el_version=$(rpm -qa '(oraclelinux|sl|redhat|centos|fedora|system)-release(|-server)' --queryformat '%{VERSION}')
         case $el_version in
+            1*) os_version=6 ;;
+            2*) os_version=7 ;;
             5*) os_version=5 ; error "RHEL/CentOS 5 is no longer supported" "$supported" ;;
             6*) os_version=6 ;;
             7*) os_version=7 ;;
