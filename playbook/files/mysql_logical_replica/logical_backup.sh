@@ -60,7 +60,7 @@ error(){
 identify_os(){
     arch=$(uname -m)
     # Check for RHEL/CentOS, Fedora, etc.
-    if command -v rpm >/dev/null && [[ -e /etc/redhat-release ]]
+    if command -v rpm >/dev/null && [[ -e /etc/redhat-release || -e /etc/os-release ]]
     then
         os_type=rhel
         el_version=$(rpm -qa '(oraclelinux|sl|redhat|centos|fedora|system)-release(|-server)' --queryformat '%{VERSION}')
