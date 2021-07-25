@@ -45,6 +45,7 @@ fi
 os_type=
 # os_version as demanded by the OS (codename, major release, etc.)
 os_version=
+supported="Only RHEL/CentOS 7 & 8 / Debian / Ubuntu are supported for this installation process."
 
 msg(){
     type=$1 #${1^^}
@@ -63,15 +64,15 @@ identify_os(){
     if command -v rpm >/dev/null && [[ -e /etc/redhat-release || -e /etc/os-release ]]
     then
         os_type=rhel
-        el_version=$(rpm -qa '(oraclelinux|sl|redhat|centos|fedora|system)-release(|-server)' --queryformat '%{VERSION}')
+        el_version=$(rpm -qa '(oraclelinux|sl|redhat|centos|fedora|rocky|alma|system)*release(|-server)' --queryformat '%{VERSION}')
         case $el_version in
-            1*) os_version=6 ;;
+            1*) os_version=6 ; error "RHEL/CentOS 6 is no longer supported" "$supported" ;;
             2*) os_version=7 ;;
             5*) os_version=5 ; error "RHEL/CentOS 5 is no longer supported" "$supported" ;;
-            6*) os_version=6 ;;
+            6*) os_version=6 ; error "RHEL/CentOS 6 is no longer supported" "$supported" ;;
             7*) os_version=7 ;;
-            8*) os_version=8 ; extra_options="module_hotfixes = 1" ;;
-             *) error "Detected RHEL or compatible but version ($el_version) is not supported." "$supported"  "$otherplatforms" ;;
+            8*) os_version=8 ;;
+             *) error "Detected RHEL or compatible but version ($el_version) is not supported." "$supported" ;;
          esac
          if [[ $arch == aarch64 ]] && [[ $os_version != 7 ]]; then error "Only RHEL/CentOS 7 are supported for ARM64. Detected version: '$os_version'"; fi
     elif [[ -e /etc/os-release ]]
@@ -86,7 +87,7 @@ identify_os(){
                     8*) os_version=jessie ;;
                     9*) os_version=stretch ;;
                     10*) os_version=buster ;;
-                     *) error "Detected Debian but version ($debian_version) is not supported." "$supported"  "$otherplatforms" ;;
+                     *) error "Detected Debian but version ($debian_version) is not supported." "$supported" ;;
                 esac
                 if [[ $arch == aarch64 ]]; then error "Debian is not currently supported for ARM64"; fi
                 ;;
@@ -99,7 +100,7 @@ identify_os(){
                     trusty ) ;;
                     xenial ) ;;
                     bionic ) ;;
-                    *) error "Detected Ubuntu but version ($os_version) is not supported." "Only Ubuntu LTS releases are supported."  "$otherplatforms" ;;
+                    *) error "Detected Ubuntu but version ($os_version) is not supported." "Only Ubuntu LTS releases are supported." ;;
                 esac
                 if [[ $arch == aarch64 ]]
                 then
@@ -148,10 +149,19 @@ then
       ### install pre-packages ####
       yum -y install yum-utils
 
-      ### install mysql repo ####
-      yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
-      yum-config-manager --disable mysql80-community
-      yum-config-manager --enable mysql57-community
+      #### REPO MYSQL ######
+      if [[ $os_version == "7" ]]; then
+        # -------------- For RHEL/CentOS 7 --------------
+        #### https://dev.mysql.com/downloads/repo/yum/
+        yum -y install https://dev.mysql.com/get/mysql80-community-release-el7-3.noarch.rpm
+        yum-config-manager --disable mysql80-community
+        yum-config-manager --enable mysql57-community
+      elif [[ $os_version == "8" ]]; then
+        # -------------- For RHEL/CentOS 8 --------------
+        #### https://dev.mysql.com/downloads/repo/yum/
+        yum -y install https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm
+        sed -ie 's/enabled=1/enabled=1\nmodule_hotfixes=1/g' /etc/yum.repos.d/mysql-community.repo
+      fi
 
       ### installation mysql8 via yum ####
       yum -y install mysql-community-client
@@ -165,10 +175,14 @@ then
     then
     echo "$verify_mydumper is installed!"
     else
-       if [[ $os_version == "7" ]]; then
-          yum -y install https://github.com/maxbube/mydumper/releases/download/v0.9.5/mydumper-0.9.5-2.el7.x86_64.rpm
+       if [[ $os_version == "8" ]]; then
+         #### mydumper ######
+         yum -y install https://github.com/maxbube/mydumper/releases/download/v0.10.7-2/mydumper-0.10.7-2.el8.x86_64.rpm
+       elif [[ $os_version == "7" ]]; then
+         #### mydumper ######
+         yum -y install https://github.com/maxbube/mydumper/releases/download/v0.10.7-2/mydumper-0.10.7-2.el7.x86_64.rpm
        elif [[ $os_version == "6" ]]; then
-          yum -y install https://github.com/maxbube/mydumper/releases/download/v0.9.5/mydumper-0.9.5-2.el6.x86_64.rpm
+         yum -y install https://github.com/maxbube/mydumper/releases/download/v0.9.5/mydumper-0.9.5-2.el6.x86_64.rpm
       fi
     fi
 
