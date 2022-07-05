@@ -176,11 +176,9 @@ then
     echo "$verify_mydumper is installed!"
     else
        if [[ $os_version == "8" ]]; then
-         #### mydumper ######
-         yum -y install https://github.com/maxbube/mydumper/releases/download/v0.10.7-2/mydumper-0.10.7-2.el8.x86_64.rpm
+         yum -y install https://github.com/mydumper/mydumper/releases/download/v0.11.5-2/mydumper-0.11.5-2.el8.x86_64.rpm
        elif [[ $os_version == "7" ]]; then
-         #### mydumper ######
-         yum -y install https://github.com/maxbube/mydumper/releases/download/v0.10.7-2/mydumper-0.10.7-2.el7.x86_64.rpm
+         yum -y install https://github.com/mydumper/mydumper/releases/download/v0.11.5-2/mydumper-0.11.5-2.el7.x86_64.rpm
        elif [[ $os_version == "6" ]]; then
          yum -y install https://github.com/maxbube/mydumper/releases/download/v0.9.5/mydumper-0.9.5-2.el6.x86_64.rpm
       fi
